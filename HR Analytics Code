@@ -1,6 +1,3 @@
-# MSc Business Analytics Dissertation
-# Student ID: 6608705
-
 # Clears all objects in "global environment"
 rm(list = ls())
 
@@ -9,9 +6,6 @@ cat("\014")
 
 # Sets R random numbers to start at the same sequence
 set.seed(1234)
-
-# Machine Learning & Visualisation Individual Assignment
-print("Student ID: 6608705 Dissertation:HR Analytics Of Different Factors Affect Employee Attrition")
 
 source("4labfunctions.R")
 source("lab4DataPrepNew.R")
@@ -53,6 +47,7 @@ pacman::p_load(char = myLibraries, install = TRUE, character.only = TRUE)
 # load the data
 hr <- read_csv("HR-Employee-Attrition-Data.csv")
 
+
 ### Data Preprocessing
 
 # check for missing value
@@ -60,7 +55,6 @@ colSums(is.na(hr)) # no missing value identified
 
 # check all data type is correct
 str(hr)
-
 
 # remove unused variables
 hr <- hr[, -c(9, 10, 22, 27)]
@@ -78,10 +72,10 @@ hr$WorkLifeBalance <- factor(hr$WorkLifeBalance)
 hr$Attrition <- factor(hr$Attrition)
 hr$BusinessTravel <- factor(hr$BusinessTravel)
 
-
 # checking for outlier
 boxplot(hr$DailyRate, main="outlier check", boxwex=0.1)$out
 boxplot(hr$MonthlyIncome, main="outlier check", boxwex=0.1)$out
+
 
 
 ### *************Data Visualisation************* ###
@@ -101,8 +95,6 @@ attrition_plot <- ggplot(hr, aes(x = Attrition)) +
   ylab("Attrition number") +
   scale_y_continuous(labels = scales::percent)
 print(attrition_plot)
-
-
 
 # age and employee attrition split into group
 group_age <- hr %>%
@@ -126,9 +118,6 @@ group_age %>%
   select(JobRole) %>%
   count(JobRole)
 
-
-
-
 # Highest percentage of attrition by JobRole (figure 8)
 options(repr.plot.width = 8, repr.plot.height = 5)
 
@@ -137,7 +126,6 @@ job.sal <- hr %>%
   select(JobRole, MonthlyIncome) %>%
   group_by(JobRole) %>%
   summarize(avg = mean(MonthlyIncome))
-
 
 p1 <- ggplot(job.sal, aes(x = JobRole, y = MonthlyIncome)) +
   geom_bar(stat = "identity", width = .5, fill = "#2eb5fe") +
@@ -149,9 +137,6 @@ p1 <- ggplot(job.sal, aes(x = JobRole, y = MonthlyIncome)) +
   ) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.6))
 print(p1)
-
-
-
 
 # attrition by job role (figure 9)
 options(repr.plot.width = 20, repr.plot.height = 10)
@@ -178,9 +163,6 @@ par(mar = pyramid.plot(no.attr$pct, yes.attr$pct,
                        gap = 42, show.values = T, rxcol = yesfunc(9), lxcol = nofunc(15)
 ))
 
-
-
-
 # percentage salary hike and employee attrition (figure 10)
 per.sal <- hr %>%
   select(Attrition, PercentSalaryHike, MonthlyIncome) %>%
@@ -200,7 +182,6 @@ per.sal <- hr %>%
         plot.title=element_text(hjust=0.5, color="white"))
 print(per.sal)
 
-
 # job satisfaction and employee attrition (figure 11)
 ggplot(hr, aes(x = JobSatisfaction, fill = Attrition)) +
   geom_bar() +
@@ -211,10 +192,6 @@ ggplot(hr, aes(x = JobRole, fill = JobSatisfaction)) +
   geom_bar() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.6)) +
   scale_fill_discrete(name = "Job Satisfaction", labels = c("low", "medium", "high", "very high"))
-
-
-
-
 
 # workingEnvironment Satisfaction by job role (figure 13)
 options(repr.plot.width = 8, repr.plot.height = 5)
@@ -233,7 +210,6 @@ ggplot(env.attr, aes(x = JobRole, y = avg.env)) +
   labs(title = "Working Environment and Employee Attrition", y = "Avg Working Environment Satisfaction", x = "Job Role") +
   scale_color_manual(values = c("#58FA58", "#FA5858"))
 
-
 env.attr2 <- hr %>%
   select(EnvironmentSatisfaction, JobRole, Attrition) %>%
   group_by(JobRole, Attrition)
@@ -248,8 +224,6 @@ ggplot(env.attr2, aes(x = JobRole, y = EnvironmentSatisfaction)) +
   ) +
   labs(title = "Working Environment and Employee Attrition 2", y = "Working Environment Satisfaction", x = "Job Role") +
   scale_color_manual(values = c("#58FA58", "#FA5858"))
-
-
 
 # reationship with manager and empoyee attrition 
 
@@ -269,7 +243,6 @@ ggplot(years_manager, aes(x = YearsWithCurrManager, fill = Attrition)) +
   geom_bar() +
   geom_text(aes(label = ..count..), stat = "count", vjust = 1.5, colour = "black")
 
-
 # reationship satisfaction, years with manager and empployee attrition (figure 15)
 relation.attr <- hr %>%
   select(RelationshipSatisfaction, YearsWithCurrManager, Attrition) %>%
@@ -286,9 +259,6 @@ ggplot(relation.attr, aes(x = RelationshipSatisfaction, y = avg.reation)) +
   ) +
   labs(title = "Reationship Satisfaction and Employee Attrition", y = "Avg Years With Manager", x = "Relationship Satisfaction") +
   scale_color_manual(values = c("#58FA58", "#FA5858"))
-
-
-
 
 # work life balance (figure 16)
 options(repr.plot.width = 3, repr.plot.height = 5)
@@ -311,7 +281,6 @@ department <- attritions %>%
   labs(title = "Work Life Balance by Department", x = "Work and Life Balance", y = "Number of Employees")
 
 department
-
 
 # work life balane and employee attrition rate (figure 17)
 ggplot(hr, aes(x = WorkLifeBalance, fill = Attrition)) +
@@ -342,8 +311,6 @@ overtime_percent <- hr %>% select(OverTime, Attrition) %>% filter(Attrition == "
   labs(title="Overtime and Employee Attrition", x="", y="") 
 print(overtime_percent)
 
-
-
 # business travel (figure 19)
 work_bal_pct <- hr %>% select(Attrition, BusinessTravel, WorkLifeBalance) %>% group_by(Attrition, BusinessTravel) %>% 
   summarize(count=n()) %>% mutate(pct=round(prop.table(count),2) * 100) %>%
@@ -355,7 +322,6 @@ work_bal_pct <- hr %>% select(Attrition, BusinessTravel, WorkLifeBalance) %>% gr
   theme(plot.background=element_rect(fill="#d0f6f7"))
 
 print(work_bal_pct)
-
 
 # correlation test (figure 20)
 
@@ -410,10 +376,10 @@ NprintMeasures(results = measures, title = "Logistic Regression Model")
 importance<-as.data.frame(caret::varImp(logistic_model_hr , scale = TRUE))
 row.names(importance)<-gsub("[[:punct:][:blank:]]+", "", row.names(importance))
 barplot(t(importance[order(importance$Overall),,drop=FALSE]),las=3, border = 0, cex.names =0.5)
+
 ### ************** Decision Tree Model ************************ ###
 
 # Decision Tree Training Model
-
 dt_hr <- rpart(Attrition ~ ., data = training_data, method = "class")
 print(summary(dt_hr))
 
@@ -466,8 +432,8 @@ feature_importance <- var_imp %>%
   labs(title = "Attributes Importance for the Decision Tree Model", x = "Attributes", y = "Importance Index")
 
 print(feature_importance)
-### ************ Random Forest Model *********************** ###
 
+### ************ Random Forest Model *********************** ###
 rf_hr <- randomForest(Attrition ~ ., data = training_data, ntree = 1500)
 print(importance(rf_hr))
 print(varImpPlot(rf_hr))
@@ -497,12 +463,9 @@ print(paste("threshold for random forest is", threshold_rf))
 # multicollinearity on the logistic regression to select new features
 car::vif(logistic_model_hr)
 
-
 hr_3<-dplyr::select(hr_2,-c(EducationField, MaritalStatus, StockOptionLevel, 
                             PercentSalaryHike, PerformanceRating, StockOptionLevel, TotalWorkingYears, YearsAtCompany, 
                             YearsInCurrentRole, YearsSinceLastPromotion, YearsWithCurrManager))
-
-
 
 training_records_2 <- round(nrow(hr_3) * (70 / 100))
 
@@ -511,7 +474,6 @@ training_data_2 <- hr_3[1:training_records, ]
 testing_data_2 <- hr_3[-(1:training_records), ]
 
 test_expected_2 <- plyr::mapvalues(testing_data_2$Attrition, from = c("No", "Yes"), to = c(0, 1))
-
 
 # new logistic regression after multicollinearity filtering
 logistic_model_hr_2 <- glm(Attrition ~ ., data = training_data_2, family = binomial)
@@ -587,9 +549,6 @@ feature_importance_2 <- var_imp_2 %>%
 
 print(feature_importance_2)
 
-
-
-
 # new random forest after multicollinearity filtering
 rf_hr_2 <- randomForest(Attrition ~ ., data = training_data_2, ntree = 1500)
 print(importance(rf_hr_2))
@@ -610,4 +569,3 @@ NprintMeasures(results = measures_rf_2, title = "Random Forest Model 2")
 
 threshold_rf_2 <- measures_rf_2$threshold
 print(paste("threshold for random forest is", threshold_rf_2))
-
